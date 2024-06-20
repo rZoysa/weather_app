@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:weather_app/screens/widgets/hourly_forcast_item.dart';
-import 'package:weather_app/screens/widgets/information.dart';
+import 'package:weather_app/screens/weather_screen/widgets/hourly_forcast_item.dart';
+import 'package:weather_app/screens/weather_screen/widgets/information.dart';
 
 class WeatherScreen extends StatelessWidget {
   const WeatherScreen({super.key});
