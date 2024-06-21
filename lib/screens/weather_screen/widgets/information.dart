@@ -16,9 +16,13 @@ class Information extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(4.0),
+      margin: const EdgeInsets.only(top: 10),
       child: Column(
         children: [
-          Icon(icon),
+          Icon(
+            icon,
+            size: 32,
+          ),
           const SizedBox(height: 10),
           Text(
             title,
