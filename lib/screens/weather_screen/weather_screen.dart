@@ -16,6 +16,8 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
+  late Future<Map<String, dynamic>> weather;
+
   Future<Map<String, dynamic>> getCurrentWeather() async {
     try {
       String apiKey = dotenv.env['APPID'] ?? 'API_KEY_NOT_FOUND';
@@ -37,6 +39,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    weather = getCurrentWeather();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -50,13 +58,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                getCurrentWeather();
+                setState(() {
+                  weather = getCurrentWeather();
+                });
               },
               icon: const Icon(Icons.refresh))
         ],
       ),
       body: FutureBuilder(
-        future: getCurrentWeather(),
+        future: weather,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -138,28 +148,34 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-            
+
                   const SizedBox(height: 14),
-            
+
                   //Weather forecast cards
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        for (int i = 1; i <= 5; i++)
-                          HourlyForcastItem(
-                            icon: getIcon(
-                                data['list'][i]['weather'][0]['main'].toString()),
-                            temperature:
-                                data['list'][i]['main']['temp'].toString(),
-                            time: extractTime(data['list'][i]['dt_txt']),
-                          ),
-                      ],
+                  SizedBox(
+                    height: 120,
+                    child: ListView.builder(
+                      itemCount: 10,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final hourlyForecast = data['list'][index + 1];
+                        final hourlySky = data['list'][index]['weather'][0]
+                                ['main']
+                            .toString();
+                        final hourlyTemp =
+                            data['list'][index]['main']['temp'].toString();
+
+                        return HourlyForcastItem(
+                          time: extractTime(hourlyForecast['dt_txt']),
+                          temperature: hourlyTemp,
+                          icon: getIcon(hourlySky),
+                        );
+                      },
                     ),
                   ),
-            
+
                   const SizedBox(height: 20),
-            
+
                   //Additional Information
                   const Text(
                     'Additional Information',
@@ -168,7 +184,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-            
+
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Row(
@@ -218,7 +234,7 @@ String extractTime(String dateTimeString) {
   DateTime dateTime = DateTime.parse(dateTimeString);
 
   // Format the DateTime object to extract the time
-  String timeString = DateFormat.Hm().format(dateTime);
+  String timeString = DateFormat.jm().format(dateTime);
 
   return timeString;
 }
