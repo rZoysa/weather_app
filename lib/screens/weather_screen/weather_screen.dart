@@ -1,11 +1,34 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 import 'package:weather_app/screens/weather_screen/widgets/hourly_forcast_item.dart';
 import 'package:weather_app/screens/weather_screen/widgets/information.dart';
 
-class WeatherScreen extends StatelessWidget {
+class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
+
+  @override
+  State<WeatherScreen> createState() => _WeatherScreenState();
+}
+
+class _WeatherScreenState extends State<WeatherScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getCurrentWeather();
+  }
+
+  Future getCurrentWeather() async {
+    String apiKey = dotenv.env['APPID'] ?? 'API_KEY_NOT_FOUND';
+    String cityName = 'London';
+    final result = await http.get(
+      Uri.parse(
+          'https://api.openweathermap.org/data/2.5/weather?q=$cityName,uk&APPID=$apiKey'),
+    );
+    print(result.body);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +106,31 @@ class WeatherScreen extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  HourlyForcastItem(icon: Icons.cloud, temperature: '320.12', time: '03:00',),
-                  HourlyForcastItem(icon: Icons.sunny, temperature: '320.12', time: '03:00',),
-                  HourlyForcastItem(icon: Icons.cloud, temperature: '320.12', time: '03:00',),
-                  HourlyForcastItem(icon: Icons.sunny, temperature: '320.12', time: '03:00',),
-                  HourlyForcastItem(icon: Icons.sunny, temperature: '320.12', time: '03:00',),                  
+                  HourlyForcastItem(
+                    icon: Icons.cloud,
+                    temperature: '320.12',
+                    time: '03:00',
+                  ),
+                  HourlyForcastItem(
+                    icon: Icons.sunny,
+                    temperature: '320.12',
+                    time: '03:00',
+                  ),
+                  HourlyForcastItem(
+                    icon: Icons.cloud,
+                    temperature: '320.12',
+                    time: '03:00',
+                  ),
+                  HourlyForcastItem(
+                    icon: Icons.sunny,
+                    temperature: '320.12',
+                    time: '03:00',
+                  ),
+                  HourlyForcastItem(
+                    icon: Icons.sunny,
+                    temperature: '320.12',
+                    time: '03:00',
+                  ),
                 ],
               ),
             ),
@@ -131,7 +174,3 @@ class WeatherScreen extends StatelessWidget {
     );
   }
 }
-
-
-
-
