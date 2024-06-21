@@ -234,7 +234,7 @@ String extractTime(String dateTimeString) {
   DateTime dateTime = DateTime.parse(dateTimeString);
 
   // Format the DateTime object to extract the time
-  String timeString = DateFormat.jm().format(dateTime);
+  String timeString = DateFormat.Hm().format(dateTime);
 
   return timeString;
 }
