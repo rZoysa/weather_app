@@ -149,7 +149,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 15),
 
                   //Weather forecast cards
                   SizedBox(
